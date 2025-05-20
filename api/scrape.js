@@ -5,6 +5,14 @@ module.exports = async (req, res) => {
   console.log('API received request');
   try {
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
+
     let url;
     if (req.method === 'POST') {
       const contentType = req.headers['content-type'] || '';
@@ -41,6 +49,8 @@ module.exports = async (req, res) => {
     try {
       console.log('Launching browser');
       const executablePath = await chromium.executablePath;
+      console.log('Chromium executable path:', executablePath);
+      
       browser = await puppeteer.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
@@ -48,6 +58,7 @@ module.exports = async (req, res) => {
         headless: chromium.headless,
         ignoreHTTPSErrors: true,
       });
+      console.log('Browser launched successfully');
       
       const page = await browser.newPage();
       await page.setViewport({ width: 1280, height: 800 });
@@ -99,10 +110,18 @@ module.exports = async (req, res) => {
       });
       console.log('Page evaluation complete, extracted content object:', content ? {title: content.title, mainTextLength: content.mainText?.length, mainHtmlLength: content.mainHtml?.length} : 'null');
 
+      if (!content || !content.mainHtml) {
+        throw new Error('No content found on the page');
+      }
+
       return res.status(200).json(content);
     } catch (error) {
       console.error('Scraping error caught in try block:', error);
-      return res.status(500).json({ error: 'Failed to scrape the webpage', details: error.message });
+      return res.status(500).json({ 
+        error: 'Failed to scrape the webpage', 
+        details: error.message,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      });
     } finally {
       if (browser) {
         console.log('Closing browser');
@@ -111,6 +130,10 @@ module.exports = async (req, res) => {
     }
   } catch (err) {
     console.error('Unexpected error caught in outer try block:', err);
-    res.status(500).json({ error: 'Internal server error', details: err.message });
+    return res.status(500).json({ 
+      error: 'Internal server error', 
+      details: err.message,
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
   }
 }; 

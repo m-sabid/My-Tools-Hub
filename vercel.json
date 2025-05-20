@@ -5,8 +5,8 @@
       "src": "api/**/*.js",
       "use": "@vercel/node",
       "config": {
-        "maxDuration": 10,
-        "memory": 1024
+        "maxDuration": 60,
+        "memory": 3008
       }
     },
     {
@@ -17,7 +17,13 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "dest": "/api/$1",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+      }
     },
     {
       "src": "/(.*)",
