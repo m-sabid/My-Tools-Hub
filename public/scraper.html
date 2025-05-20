@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Content Scraper</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6">Main Content Scraper</h1>
+        <a href="index.html" class="text-blue-600 underline mb-4 inline-block">&larr; Back to Tools Home</a>
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
+            <div class="flex gap-4 mb-4">
+                <input type="url" id="urlInput" placeholder="Enter website URL (e.g., https://example.com)" class="flex-1 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="convertBtn" class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Convert</button>
+            </div>
+            <div id="loadingSpinner" class="hidden mb-4">
+                <div class="flex justify-center items-center">
+                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+                </div>
+            </div>
+            <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"></div>
+            <div id="resultContainer" class="mt-4"></div>
+        </div>
+    </div>
+    <script src="scraper.js"></script>
+</body>
+</html> 

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML to Text Extractor</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6">HTML to Text Extractor</h1>
+        <a href="index.html" class="text-blue-600 underline mb-4 inline-block">&larr; Back to Tools Home</a>
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
+            <label for="htmlInput" class="block mb-2 font-semibold">Paste your HTML code below:</label>
+            <textarea id="htmlInput" rows="6" class="w-full border rounded px-3 py-2 mb-4" placeholder="&lt;div&gt;Hello world&lt;/div&gt;"></textarea>
+            <button id="extractBtn" class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors mb-4">Extract Text</button>
+            <div class="flex items-center gap-4 mt-4">
+                <div id="output" class="p-4 bg-gray-50 rounded text-lg font-mono flex-1"></div>
+                <button id="copyBtn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">Copy</button>
+            </div>
+        </div>
+    </div>
+    <script src="extractor.js"></script>
+</body>
+</html> 
