@@ -41,16 +41,25 @@ module.exports = async (req, res) => {
       console.log('Launching browser');
       browser = await puppeteer.launch({
         headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--disable-gpu',
+          '--window-size=1280x800'
+        ],
+        executablePath: process.env.CHROME_EXECUTABLE_PATH || null
       });
+      
       const page = await browser.newPage();
       await page.setViewport({ width: 1280, height: 800 });
       await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
 
       console.log('Navigating to url:', url);
       await page.goto(url, {
-        waitUntil: 'domcontentloaded',
-        timeout: 60000
+        waitUntil: 'networkidle0',
+        timeout: 30000
       });
       console.log('Navigation complete');
       await page.waitForTimeout(2000);
