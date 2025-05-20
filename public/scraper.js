@@ -26,12 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper function to copy text to clipboard
     const copyToClipboard = (text) => {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
+        navigator.clipboard.writeText(text).then(() => {
+            console.log('Text copied successfully');
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
     };
 
     // Function to display the scraped content
@@ -40,35 +39,35 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Create content container
         const contentDiv = document.createElement('div');
-        contentDiv.className = 'content-box';
+        contentDiv.className = 'space-y-6';
         
         // Display title
         const titleSection = document.createElement('div');
-        titleSection.className = 'section-content';
+        titleSection.className = 'bg-white p-4 rounded-lg shadow';
         titleSection.innerHTML = `
-            <h2 class="text-xl font-bold mb-4">Page Title</h2>
-            <p class="text-lg">${data.title}</p>
+            <h2 class="text-xl font-bold mb-2">Page Title</h2>
+            <p class="text-gray-700">${data.title || 'No title found'}</p>
         `;
         contentDiv.appendChild(titleSection);
 
         // Display main content as HTML
         const mainContentSection = document.createElement('div');
-        mainContentSection.className = 'section-content';
+        mainContentSection.className = 'bg-white p-4 rounded-lg shadow';
         mainContentSection.innerHTML = `
-            <h2 class="text-xl font-bold mb-4">Main Content</h2>
-            <div id="mainContentHtml" class="border p-4 rounded bg-gray-50 mb-4">${data.mainHtml}</div>
+            <h2 class="text-xl font-bold mb-2">Main Content</h2>
+            <div class="prose max-w-none">${data.mainHtml || 'No content found'}</div>
         `;
         contentDiv.appendChild(mainContentSection);
 
         // Copy buttons
         const copyBtnContainer = document.createElement('div');
-        copyBtnContainer.className = 'flex gap-4 mb-4';
+        copyBtnContainer.className = 'flex gap-4';
 
         const copyTextBtn = document.createElement('button');
         copyTextBtn.className = 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors';
         copyTextBtn.textContent = 'Copy as Text';
         copyTextBtn.onclick = () => {
-            copyToClipboard(data.mainText);
+            copyToClipboard(data.mainText || '');
             copyTextBtn.textContent = 'Copied!';
             setTimeout(() => { copyTextBtn.textContent = 'Copy as Text'; }, 1500);
         };
@@ -77,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         copyHtmlBtn.className = 'px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors';
         copyHtmlBtn.textContent = 'Copy as HTML';
         copyHtmlBtn.onclick = () => {
-            copyToClipboard(data.mainHtml);
+            copyToClipboard(data.mainHtml || '');
             copyHtmlBtn.textContent = 'Copied!';
             setTimeout(() => { copyHtmlBtn.textContent = 'Copy as HTML'; }, 1500);
         };
@@ -110,20 +109,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ url })
             });
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
-                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-            }
-
             const data = await response.json();
             
+            if (!response.ok) {
+                throw new Error(data.error || data.details || `HTTP error! status: ${response.status}`);
+            }
+
             if (data.error) {
                 throw new Error(data.error);
             }
 
             displayContent(data);
         } catch (error) {
-            showError(error.message);
+            console.error('Error:', error);
+            showError(error.message || 'An error occurred while scraping the webpage');
         } finally {
             toggleLoading(false);
         }

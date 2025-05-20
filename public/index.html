@@ -3,26 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Tools Hub</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Web Content Scraper</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-12">
-        <h1 class="text-4xl font-extrabold text-center mb-10 text-blue-700">🛠️ My Tools Hub</h1>
-        <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-10">
-            <h2 class="text-2xl font-semibold mb-6 text-gray-800">Available Tools</h2>
-            <ul class="space-y-6">
-                <li class="p-5 bg-gray-50 rounded-lg flex flex-col gap-2 border border-gray-200 hover:shadow-md transition">
-                    <a href="scraper.html" class="text-xl text-blue-600 underline hover:text-blue-800 font-bold">Main Content Scraper</a>
-                    <span class="text-gray-500 text-base">Extracts the main readable content from any website. Copy as text or HTML.</span>
-                </li>
-                <li class="p-5 bg-gray-50 rounded-lg flex flex-col gap-2 border border-gray-200 hover:shadow-md transition">
-                    <a href="extractor.html" class="text-xl text-blue-600 underline hover:text-blue-800 font-bold">HTML to Text Extractor</a>
-                    <span class="text-gray-500 text-base">Paste HTML and get the plain readable text. Copy with one click.</span>
-                </li>
-            </ul>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Web Content Scraper</h1>
+        
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+            <div class="mb-6">
+                <label for="urlInput" class="block text-sm font-medium text-gray-700 mb-2">Enter URL to scrape:</label>
+                <div class="flex gap-2">
+                    <input type="url" id="urlInput" 
+                           class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="https://example.com">
+                    <button id="convertBtn" 
+                            class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                        Scrape
+                    </button>
+                </div>
+            </div>
+
+            <div id="loadingSpinner" class="hidden">
+                <div class="flex justify-center items-center py-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert"></div>
+
+            <div id="resultContainer" class="mt-6"></div>
         </div>
     </div>
+
+    <script src="scraper.js"></script>
 </body>
 </html> 
